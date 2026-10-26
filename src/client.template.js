@@ -11,11 +11,11 @@
  *
  * Preferences live in `localStorage`: they are local decoration, not Host state.
  *
- * @module @workfile/dsh-appearance
+ * @module dsh-appearance
  */
 
 window.__ModuleLoader__.load({
-  id: '@workfile/dsh-appearance',
+  id: 'dsh-appearance',
   factory(require) {
     const React = require('react')
     const h = React.createElement
@@ -26,7 +26,7 @@ window.__ModuleLoader__.load({
     const STORAGE_KEY = 'dsh.appearance.v1'
     const IMAGE_KEY = 'dsh.appearance.image.v1'
     const LEGACY_KEY = 'dsh.background.v1'
-    const OVERRIDE_SOURCE = '@workfile/dsh-appearance'
+    const OVERRIDE_SOURCE = 'dsh-appearance'
     const MAX_SOURCE_BYTES = 30 * 1024 * 1024
     const MAX_STORED_LENGTH = 2_400_000
     const ATTEMPTS = [[2560, 0.86], [1920, 0.8], [1600, 0.72], [1280, 0.64]]
