@@ -13,7 +13,7 @@ DeepSeek Harness 的 Web UI 外观插件：在**设置 → 外观**里管理窗�
 从 GitHub 安装（推荐）：
 
 ```powershell
-dsh plugin --profile desktop add github:2BingLing/dsh-appearance
+dsh plugin --profile desktop add github:zhaohzXo/dsh-appearance
 ```
 
 或安装本地目录：

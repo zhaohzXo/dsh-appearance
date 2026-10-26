@@ -6,12 +6,12 @@ DSH Market（<https://dsh.market/>）只收录 **GitHub** 仓库，两种提交�
 
 ## 一、仓库侧（做一次）
 
-1. 在 GitHub 建一个公开仓库，例如 `2BingLing/dsh-appearance`（不要勾选自动生成 README / .gitignore）。
+1. 在 GitHub 建一个公开仓库，例如 `zhaohzXo/dsh-appearance`（不要勾选自动生成 README / .gitignore）。
 2. 推送本仓库：
 
    ```powershell
    cd D:\workFile\my\dshP\dsh-appearance
-   git remote add origin https://github.com/2BingLing/dsh-appearance.git
+   git remote add origin https://github.com/zhaohzXo/dsh-appearance.git
    git push -u origin master
    ```
 
@@ -27,7 +27,7 @@ DSH Market（<https://dsh.market/>）只收录 **GitHub** 仓库，两种提交�
 | 公开、非 fork、非归档、非官方本体 | 是 |
 | cordis 型标记 | 根目录 `cordis.patch.yml` ✅ |
 | `package.json` 含 `dsh` 字段 | ✅ `dsh.bundle` / `dsh.client` |
-| 可安装 | `dsh plugin --profile <name> add github:2BingLing/dsh-appearance` |
+| 可安装 | `dsh plugin --profile <name> add github:zhaohzXo/dsh-appearance` |
 
 ## 三、issue 正文（复制粘贴）
 

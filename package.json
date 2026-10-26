@@ -13,10 +13,10 @@
     "theme",
     "boot-intro"
   ],
-  "homepage": "https://github.com/2BingLing/dsh-appearance#readme",
+  "homepage": "https://github.com/zhaohzXo/dsh-appearance#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/2BingLing/dsh-appearance.git"
+    "url": "git+https://github.com/zhaohzXo/dsh-appearance.git"
   },
   "exports": {
     ".": "./index.js",
