@@ -10,11 +10,19 @@ DeepSeek Harness 的 Web UI 外观插件：在**设置 → 外观**里管理窗�
 
 ## 安装
 
+从 GitHub 安装（推荐）：
+
+```powershell
+dsh plugin --profile desktop add github:2BingLing/dsh-appearance
+```
+
+或安装本地目录：
+
 ```powershell
 dsh plugin add "D:\workFile\my\dshP\dsh-appearance"
 ```
 
-或者在本 GUI 的插件管理里安装目录 `D:\workFile\my\dshP\dsh-appearance`。
+也可以在本 GUI 的插件管理里安装目录 `D:\workFile\my\dshP\dsh-appearance`。
 安装后**刷新页面或重启应用**一次即可看到「设置 → 外观」。
 
 ## 用法
@@ -86,6 +94,16 @@ node build.mjs
 | `dsh.appearance.image.v1` | 壁纸内容（本地图片为 WebP data URL；URL 壁纸则存该 URL，≤2.4 MB） |
 
 旧版 `dsh.background.v1` 会在首次读取时自动迁移。壁纸与配置分离存放：拖取景、拉缩放只重写几十字节的配置，不会重写整张图片。
+
+## 截图
+
+| 六张内置壁纸 | 设置 → 外观（深色） |
+| --- | --- |
+| ![内置壁纸](docs/screenshots/builtin-wallpapers.jpg) | ![设置页](docs/screenshots/settings-dark.png) |
+
+| 开场动画 | 应用壁纸后的主界面 |
+| --- | --- |
+| ![开场动画](docs/screenshots/boot-intro.jpg) | ![主界面](docs/screenshots/wallpaper-applied.jpg) |
 
 ## 已知限制
 
