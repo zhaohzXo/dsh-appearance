@@ -1,0 +1,7 @@
+node_modules/
+.verify/node_modules/
+.verify/*.png
+.verify/*.webp
+.verify/*.log
+*.tgz
+.DS_Store

@@ -1,0 +1,753 @@
+
+/* Accent palettes. The cover resolves every tint through these properties, so
+ * one attribute on the cover repaints the chrome and the canvas field. */
+.dshfx-root {
+  --fx-1: 94 234 212;
+  --fx-2: 56 189 248;
+  --fx-3: 139 92 246;
+  --fx-4: 125 211 252;
+  --fx-5: 148 197 255;
+  --fx-6: 203 213 225;
+  --fx-7: 148 163 184;
+  --fx-8: 167 139 250;
+  --fx-9: 186 230 253;
+  --fx-s1: #5eead4;
+  --fx-s1b: #8be9d9;
+  --fx-s2: #22d3ee;
+  --fx-s3: #a78bfa;
+  --fx-s3b: #c4b5fd;
+  --fx-text: #f4f9ff;
+}
+
+.dshfx-root[data-accent='violet'] {
+  --fx-1: 167 139 250;
+  --fx-2: 139 92 246;
+  --fx-3: 56 189 248;
+  --fx-4: 196 181 253;
+  --fx-5: 221 214 254;
+  --fx-6: 226 232 240;
+  --fx-7: 148 163 184;
+  --fx-8: 125 211 252;
+  --fx-9: 233 213 255;
+  --fx-s1: #a78bfa;
+  --fx-s1b: #c4b5fd;
+  --fx-s2: #8b5cf6;
+  --fx-s3: #38bdf8;
+  --fx-s3b: #7dd3fc;
+  --fx-text: #f5f3ff;
+}
+
+.dshfx-root[data-accent='amber'] {
+  --fx-1: 251 191 36;
+  --fx-2: 245 158 11;
+  --fx-3: 239 68 68;
+  --fx-4: 253 224 71;
+  --fx-5: 254 240 138;
+  --fx-6: 254 243 199;
+  --fx-7: 180 83 9;
+  --fx-8: 251 146 60;
+  --fx-9: 255 237 213;
+  --fx-s1: #fbbf24;
+  --fx-s1b: #fde68a;
+  --fx-s2: #f59e0b;
+  --fx-s3: #ef4444;
+  --fx-s3b: #fca5a5;
+  --fx-text: #fffbeb;
+}
+
+.dshfx-root[data-accent='emerald'] {
+  --fx-1: 52 211 153;
+  --fx-2: 16 185 129;
+  --fx-3: 34 211 238;
+  --fx-4: 110 231 183;
+  --fx-5: 167 243 208;
+  --fx-6: 209 250 229;
+  --fx-7: 6 148 162;
+  --fx-8: 45 212 191;
+  --fx-9: 204 251 241;
+  --fx-s1: #34d399;
+  --fx-s1b: #6ee7b7;
+  --fx-s2: #10b981;
+  --fx-s3: #22d3ee;
+  --fx-s3b: #67e8f9;
+  --fx-text: #ecfdf5;
+}
+
+/* Single-scene presets have no shot rail to report progress against. */
+.dshfx-root[data-compact] .dshfx-steps,
+.dshfx-root[data-compact] .dshfx-hint {
+  display: none;
+}
+
+/* The skip affordances disappear when the user disables skipping. */
+.dshfx-root[data-noskip] .dshfx-skip,
+.dshfx-root[data-noskip] .dshfx-hint {
+  display: none;
+}
+
+/* Completion flash: one bloom as the meter tops out. */
+.dshfx-root[data-flash] .dshfx-flash {
+  opacity: 1;
+  transition-duration: 90ms;
+}
+
+.dshfx-root[data-preview] {
+  cursor: default;
+}
+
+/* Cinematic boot cover. Every surface is self-contained: the cover must render
+ * before theme tokens or fonts are guaranteed, so it only uses literal colors
+ * and system stacks. The sequence runs four scenes (`data-scene`), each
+ * choreographed here while the canvas paints the matching particle field. */
+
+.dshfx-root {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483500;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 50% -10%, rgb(var(--fx-2) / 0.18), transparent 55%),
+    radial-gradient(90% 70% at 82% 108%, rgb(var(--fx-3) / 0.24), transparent 60%),
+    radial-gradient(70% 60% at 12% 88%, rgb(20 184 166 / 0.16), transparent 62%),
+    #04060c;
+  color: #e8f2ff;
+  opacity: 1;
+  transition: opacity 700ms cubic-bezier(0.65, 0, 0.35, 1),
+    transform 700ms cubic-bezier(0.65, 0, 0.35, 1),
+    filter 700ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.dshfx-root[data-exiting] {
+  opacity: 0;
+  transform: scale(1.06);
+  filter: blur(8px) brightness(1.2);
+  pointer-events: none;
+}
+
+.dshfx-root[data-reduced] {
+  transition-duration: 1ms;
+}
+
+.dshfx-field {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.82;
+}
+
+/* Perspective grid floor + horizon glow. */
+.dshfx-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgb(var(--fx-1) / 0.075) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--fx-1) / 0.075) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(75% 62% at 50% 58%, #000 10%, transparent 78%);
+  transform: perspective(520px) rotateX(58deg) scale(2.1) translateY(18%);
+  transform-origin: 50% 100%;
+  opacity: 0.55;
+  transition: opacity 1.2s ease, animation-duration 1.2s ease;
+  animation: gridDrift 14s linear infinite;
+}
+
+/* Breathing energy halo behind the wordmark, with one rotating arc. */
+.dshfx-halo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(92vmin, 880px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  corner-shape: round;
+  transform: translate(-50%, -50%) scale(0.92);
+  background: radial-gradient(circle, rgb(var(--fx-2) / 0.16), rgb(var(--fx-3) / 0.06) 46%, transparent 68%);
+  filter: blur(26px);
+  opacity: 0.55;
+  pointer-events: none;
+  transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.2s ease;
+  animation: haloPulse 6s ease-in-out infinite;
+}
+
+.dshfx-halo::before {
+  content: '';
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  corner-shape: round;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg 210deg,
+    rgb(var(--fx-1) / 0.5) 286deg,
+    rgb(var(--fx-4) / 0.16) 320deg,
+    transparent 352deg
+  );
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
+  animation: spin 7.5s linear infinite;
+}
+
+.dshfx-rings {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  transition: transform 1.3s cubic-bezier(0.16, 1, 0.3, 1), filter 1.3s ease;
+}
+
+.dshfx-ring {
+  position: absolute;
+  width: min(46vmin, 430px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  corner-shape: round;
+  border: 1px solid rgb(var(--fx-1) / 0.28);
+  box-shadow:
+    0 0 34px rgb(var(--fx-1) / 0.16) inset,
+    0 0 24px rgb(var(--fx-2) / 0.12);
+  transition: border-color 1.2s ease, box-shadow 1.2s ease;
+  animation: breathe 5.5s ease-in-out infinite;
+}
+
+.dshfx-ring::before,
+.dshfx-ring::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  corner-shape: round;
+  border: 1px solid transparent;
+}
+
+.dshfx-ring::before {
+  inset: -18px;
+  border-top-color: rgb(var(--fx-4) / 0.55);
+  border-right-color: rgb(var(--fx-4) / 0.14);
+  animation: spin 9s linear infinite;
+}
+
+.dshfx-ring::after {
+  inset: 18px;
+  border-bottom-color: rgb(var(--fx-8) / 0.5);
+  border-left-color: rgb(var(--fx-8) / 0.12);
+  animation: spin 13s linear infinite reverse;
+}
+
+.dshfx-ringSlow {
+  width: min(62vmin, 590px);
+  border-color: rgb(var(--fx-3) / 0.16);
+  animation-duration: 8s;
+}
+
+.dshfx-ringDash {
+  width: min(34vmin, 320px);
+  border-style: dashed;
+  border-color: rgb(226 232 240 / 0.14);
+  animation-duration: 11s;
+}
+
+/* Scene 1: the rings rush outward out of focus. */
+.dshfx-root[data-scene='warp'] .dshfx-rings {
+  transform: scale(1.2);
+  filter: blur(1.5px);
+}
+
+.dshfx-root[data-scene='warp'] .dshfx-grid {
+  opacity: 0.9;
+  animation-duration: 4.5s;
+}
+
+.dshfx-root[data-scene='warp'] .dshfx-halo {
+  transform: translate(-50%, -50%) scale(0.68);
+  opacity: 0.95;
+}
+
+/* Scene 2: the mesh settles over the full frame; rings dim down. */
+.dshfx-root[data-scene='mesh'] .dshfx-ring {
+  border-color: rgb(var(--fx-1) / 0.18);
+}
+
+.dshfx-root[data-scene='mesh'] .dshfx-halo {
+  opacity: 0.4;
+}
+
+/* Scene 3: the orbital array widens and tilts. */
+.dshfx-root[data-scene='orbit'] .dshfx-rings {
+  transform: scale(1.1) rotate(9deg);
+}
+
+.dshfx-root[data-scene='orbit'] .dshfx-halo {
+  transform: translate(-50%, -50%) scale(1.16);
+  opacity: 0.8;
+}
+
+.dshfx-root[data-scene='orbit'] .dshfx-ring {
+  border-color: rgb(var(--fx-8) / 0.38);
+}
+
+/* Scene 4: the core closes in and the scan accelerates. */
+.dshfx-root[data-scene='core'] .dshfx-rings {
+  transform: scale(0.84);
+  filter: none;
+}
+
+.dshfx-root[data-scene='core'] .dshfx-ring {
+  border-color: rgb(var(--fx-1) / 0.55);
+  box-shadow:
+    0 0 52px rgb(var(--fx-1) / 0.24) inset,
+    0 0 40px rgb(var(--fx-2) / 0.24);
+}
+
+.dshfx-root[data-scene='core'] .dshfx-halo {
+  transform: translate(-50%, -50%) scale(1.28);
+  opacity: 1;
+}
+
+.dshfx-root[data-scene='core'] .dshfx-scan {
+  animation-duration: 1.9s;
+}
+
+/* A single radar sweep crossing the cover. */
+.dshfx-scan {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgb(var(--fx-1) / 0.035) 46%,
+    rgb(var(--fx-1) / 0.16) 50%,
+    rgb(var(--fx-1) / 0.035) 54%,
+    transparent 100%
+  );
+  transform: translateY(-100%);
+  animation: sweep 4.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+  transition: animation-duration 800ms ease;
+}
+
+/* Scene-change flash: a short additive bloom between shots. */
+.dshfx-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 180ms ease-out;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgb(255 255 255 / 0.5),
+    rgb(var(--fx-1) / 0.18) 38%,
+    transparent 68%
+  );
+  mix-blend-mode: screen;
+}
+
+.dshfx-root[data-shift] .dshfx-flash {
+  opacity: 1;
+  transition-duration: 60ms;
+}
+
+.dshfx-root[data-ready] .dshfx-flash {
+  opacity: 0.85;
+  transition-duration: 120ms;
+}
+
+.dshfx-root[data-exiting] .dshfx-flash {
+  opacity: 0;
+}
+
+/* Side telemetry rails: tick marks plus a fading seam. */
+.dshfx-hud {
+  position: absolute;
+  top: 15%;
+  bottom: 15%;
+  z-index: 1;
+  width: 12px;
+  opacity: 0.55;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgb(var(--fx-1) / 0.6) 0 1px,
+    transparent 1px 15px
+  );
+  -webkit-mask: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+  mask: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+}
+
+.dshfx-hud::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgb(var(--fx-1) / 0.7) 22%,
+    rgb(var(--fx-8) / 0.5) 78%,
+    transparent
+  );
+}
+
+.dshfx-hudLeft {
+  left: 28px;
+}
+
+.dshfx-hudLeft::after {
+  left: -6px;
+}
+
+.dshfx-hudRight {
+  right: 28px;
+}
+
+.dshfx-hudRight::after {
+  right: -6px;
+}
+
+.dshfx-center {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 13px;
+  padding: 32px;
+  text-align: center;
+  animation: rise 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.dshfx-eyebrow {
+  font: 500 10px/1.4 'SF Mono', 'JetBrains Mono', Consolas, monospace;
+  letter-spacing: 0.42em;
+  color: rgb(var(--fx-5) / 0.72);
+  text-transform: uppercase;
+}
+
+.dshfx-wordmark {
+  font: 200 clamp(30px, 5.2vw, 58px)/1.08 'Montserrat', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  letter-spacing: 0.24em;
+  padding-left: 0.24em; /* balances the trailing letter-spacing */
+  color: var(--fx-text);
+  text-shadow:
+    0 0 18px rgb(var(--fx-1) / 0.5),
+    0 0 52px rgb(var(--fx-2) / 0.32);
+  background: linear-gradient(100deg, #ffffff 0%, #b9ecff 38%, var(--fx-s1b) 58%, var(--fx-s3b) 85%, #ffffff 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 5.2s linear infinite;
+}
+
+.dshfx-tagline {
+  margin-top: -4px;
+  font: 500 11px/1.6 'SF Mono', 'JetBrains Mono', Consolas, monospace;
+  letter-spacing: 0.3em;
+  color: rgb(var(--fx-6) / 0.6);
+}
+
+.dshfx-track {
+  position: relative;
+  width: min(56vw, 360px);
+  height: 2px;
+  margin-top: 16px;
+  overflow: hidden;
+  background: rgb(var(--fx-7) / 0.18);
+  box-shadow: 0 0 18px rgb(var(--fx-2) / 0.16);
+}
+
+.dshfx-fill {
+  position: absolute;
+  inset: 0;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--fx-s2), var(--fx-s1) 55%, var(--fx-s3));
+  box-shadow: 0 0 14px rgb(var(--fx-1) / 0.9);
+  transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dshfx-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.75), transparent);
+  transform: translateX(-100%);
+  animation: glint 2.4s ease-in-out infinite;
+}
+
+.dshfx-meta {
+  display: flex;
+  width: min(56vw, 360px);
+  justify-content: space-between;
+  gap: 16px;
+  font: 500 10px/1.6 'SF Mono', 'JetBrains Mono', Consolas, monospace;
+  letter-spacing: 0.18em;
+  color: rgb(var(--fx-5) / 0.66);
+}
+
+.dshfx-counter {
+  font-variant-numeric: tabular-nums;
+  color: rgb(var(--fx-1) / 0.9);
+}
+
+.dshfx-status {
+  text-transform: uppercase;
+}
+
+/* Four-step sequence rail. */
+.dshfx-steps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 20px;
+  margin-top: 18px;
+}
+
+.dshfx-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font: 500 9px/1.4 'SF Mono', 'JetBrains Mono', Consolas, monospace;
+  letter-spacing: 0.16em;
+  color: rgb(var(--fx-7) / 0.32);
+  transition: color 320ms ease;
+}
+
+.dshfx-stepDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  corner-shape: round;
+  background: currentColor;
+  box-shadow: 0 0 0 transparent;
+  transition: box-shadow 320ms ease, background 320ms ease;
+}
+
+.dshfx-stepDone {
+  color: rgb(var(--fx-1) / 0.42);
+}
+
+.dshfx-stepActive {
+  color: rgb(var(--fx-1) / 0.95);
+}
+
+.dshfx-stepActive .dshfx-stepDot {
+  background: var(--fx-s1);
+  box-shadow: 0 0 12px rgb(var(--fx-1) / 0.9);
+  animation: stepPulse 1.6s ease-in-out infinite;
+}
+
+.dshfx-hint {
+  margin-top: 6px;
+  font: 400 10px/1.6 'Segoe UI', 'Microsoft YaHei', sans-serif;
+  letter-spacing: 0.12em;
+  color: rgb(var(--fx-7) / 0.4);
+}
+
+/* Current shot, anchored above the bottom-left corner bracket. */
+.dshfx-sceneTag {
+  position: absolute;
+  bottom: 34px;
+  left: 70px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: 500 9px/1.4 'SF Mono', 'JetBrains Mono', Consolas, monospace;
+  letter-spacing: 0.24em;
+  color: rgb(var(--fx-5) / 0.55);
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.dshfx-sceneTag::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgb(var(--fx-1) / 0.8));
+}
+
+/* Explicit skip control. The whole cover also skips on click or ESC. */
+.dshfx-skip {
+  position: absolute;
+  top: 70px;
+  right: 28px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  box-sizing: border-box;
+  border: 1px solid rgb(var(--fx-1) / 0.26);
+  border-radius: 2px;
+  background: rgb(8 16 28 / 0.55);
+  color: rgb(var(--fx-6) / 0.82);
+  font: 500 10px/1 'SF Mono', 'JetBrains Mono', Consolas, monospace;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: color 200ms ease, border-color 200ms ease, background 200ms ease, box-shadow 200ms ease;
+}
+
+.dshfx-skip:hover {
+  border-color: rgb(var(--fx-1) / 0.8);
+  background: rgb(16 30 46 / 0.82);
+  color: var(--fx-text);
+  box-shadow: 0 0 26px rgb(var(--fx-1) / 0.26);
+}
+
+.dshfx-skip:focus-visible {
+  outline: 2px solid rgb(var(--fx-1) / 0.9);
+  outline-offset: 3px;
+}
+
+.dshfx-skipZh {
+  font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+  letter-spacing: 0.28em;
+  color: rgb(var(--fx-5) / 0.72);
+}
+
+.dshfx-skipKey {
+  padding: 2px 5px;
+  border: 1px solid rgb(var(--fx-5) / 0.28);
+  border-radius: 3px;
+  color: rgb(var(--fx-5) / 0.68);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+
+.dshfx-corner {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border: 1px solid rgb(var(--fx-1) / 0.35);
+  opacity: 0.6;
+}
+
+.dshfx-cornerTopLeft {
+  top: 26px;
+  left: 26px;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.dshfx-cornerTopRight {
+  top: 26px;
+  right: 26px;
+  border-left: 0;
+  border-bottom: 0;
+}
+
+.dshfx-cornerBottomLeft {
+  bottom: 26px;
+  left: 26px;
+  border-right: 0;
+  border-top: 0;
+}
+
+.dshfx-cornerBottomRight {
+  bottom: 26px;
+  right: 26px;
+  border-left: 0;
+  border-top: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.045); opacity: 0.5; }
+}
+
+@keyframes gridDrift {
+  to { background-position: 0 64px, 64px 0; }
+}
+
+@keyframes sweep {
+  0% { transform: translateY(-100%); opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes shimmer {
+  to { background-position: -220% 0; }
+}
+
+@keyframes glint {
+  60%, 100% { transform: translateX(100%); }
+}
+
+@keyframes haloPulse {
+  0%, 100% { filter: blur(26px) brightness(1); }
+  50% { filter: blur(30px) brightness(1.22); }
+}
+
+@keyframes stepPulse {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.5); opacity: 1; }
+}
+
+@media (max-width: 760px) {
+  .dshfx-hud {
+    display: none;
+  }
+
+  .dshfx-sceneTag {
+    left: 48px;
+    bottom: 30px;
+  }
+
+  .dshfx-skip {
+    top: 62px;
+    right: 20px;
+  }
+}
+
+@media (max-width: 560px) {
+  .dshfx-stepLabel {
+    display: none;
+  }
+
+  .dshfx-steps {
+    gap: 12px;
+  }
+
+  .dshfx-skipZh {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dshfx-root,
+  .dshfx-center {
+    animation: none;
+    transition-duration: 1ms;
+  }
+
+  .dshfx-field,
+  .dshfx-grid,
+  .dshfx-halo,
+  .dshfx-rings,
+  .dshfx-scan,
+  .dshfx-flash,
+  .dshfx-hud,
+  .dshfx-fill::after {
+    display: none;
+  }
+
+  .dshfx-stepActive .dshfx-stepDot {
+    animation: none;
+  }
+}
