@@ -1,5 +1,7 @@
 # 外观（壁纸 + 开场动画）
 
+[![DSH Market 收录徽章](https://raw.githubusercontent.com/2BingLing/dsh-market/master/assets/readme/badge-listed-zh.svg)](https://dsh.market/?q=zhaohzXo%2Fdsh-appearance)
+
 DeepSeek Harness 的 Web UI 外观插件：在**设置 → 外观**里管理窗口壁纸和每次启动/刷新时的开场动画。
 
 - 壁纸：本地图片、图片 URL，或六张**内置壁纸**（暮色山脉 / 黎明海岸 / 极光夜空 / 深空星云 / 黄昏沙丘 / 极光渐变）；可缩放、拖拽取景；界面外壳变成半透明磨砂，卡片与弹窗保持不透明。
@@ -24,6 +26,40 @@ dsh plugin add "D:\workFile\my\dshP\dsh-appearance"
 
 也可以在本 GUI 的插件管理里安装目录 `D:\workFile\my\dshP\dsh-appearance`。
 安装后**刷新页面或重启应用**一次即可看到「设置 → 外观」。
+
+### 装不上怎么办
+
+插件本身没有安装门槛（零依赖、无构建、无 `engines` 限制），失败几乎都发生在**下载阶段**：
+
+| 现象 | 原因 |
+| --- | --- |
+| `ERR_PNPM_GIT_RESOLVE_FAILED`、`Failed to connect to github.com port 443` | `github.com` 的 HTTPS 在你的网络下被阻断或超时 |
+| `TimeoutError: The operation was aborted due to timeout` | 同上，codeload 拉包超时（仓库较大时更容易出现） |
+| 管理器显示成功，但设置里没有「外观」 | 下载失败后**静默回滚**了，实际没装进去 |
+
+三种兜底方式，按成功率排序：
+
+```powershell
+# ① codeload 直链：不经过 git 的 ls-remote，最稳
+dsh plugin --profile <名> add "https://codeload.github.com/zhaohzXo/dsh-appearance/tar.gz/refs/heads/master"
+
+# ② 本地 tgz：离线可用，适合发给别人
+dsh plugin --profile <名> add "D:\path\dsh-appearance-0.4.0.tgz"
+
+# ③ 给 git 配代理（只影响 github.com，不动其它仓库）
+git config --global http.https://github.com.proxy http://127.0.0.1:7890
+```
+
+装完自检三步，能定位绝大多数「装了没反应」：
+
+1. **看插件管理器返回**有没有 `+ dsh-appearance <版本>` 这一行，没有就是没装成功
+2. **看 profile**：`<DSH_HOME>/profiles/<名>/package.json` 的 `dependencies` 与 `dsh.profile.bundles` 中是否都出现 `dsh-appearance`
+3. **刷新页面**（`Ctrl+R`）；仍无则完全退出应用再启动一次
+
+另外两个已知前提：
+
+- **桌面端（Electron）不能用命令行装**：`--profile desktop` 由应用独占，CLI 会报 `profile "desktop" is managed exclusively by the Electron application`，请改用应用内的插件管理。
+- **宿主版本太旧**时缺少本插件声明的注入目标（`@deepseek-ai/dsh-client-ui-settings-general`、`@deepseek-ai/dsh-client-ui-theme`），表现是设置页不出现且**不报错**，升级宿主即可。
 
 ## 用法
 
